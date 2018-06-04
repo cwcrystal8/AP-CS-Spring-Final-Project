@@ -17,7 +17,7 @@ void setup(){
   gameOver = false;
   num = -1;
   updateRate = 0;
-    colorRate = 0; 
+  colorRate = 0; 
 }
 
 void draw(){
