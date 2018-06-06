@@ -72,6 +72,9 @@ class Runner{
   }
   
   void display(){
+    fill(255,182,193);
+    stroke(255,182,193);
+    ellipse(x,y,60,55);
   }
   
   void setXSpeed(int num){
