@@ -120,6 +120,31 @@ class Runner{
           y -= 60;
           x = (x / (width / (int)maze.getMaze()[0].length)) * (width / (int)maze.getMaze()[0].length) + 30 + xSpeed;
     }
+    else if( (col2 + 1) * 60 - rightBound <= 20 &&
+              (xSpeed == 1) && 
+              (maze.getMaze()[y / 60][col2] == ' ')){
+          y -= 60;
+          x = (x / (width / (int)maze.getMaze()[0].length)) * (width / (int)maze.getMaze()[0].length) + 30 + xSpeed;
+                
+    }
+        else if( (col2 + 1) * 60 - rightBound <= 20 &&
+              (xSpeed == 1) && 
+              (maze.getMaze()[y / 60][col2] == ' ')){
+          y -= 60;
+          x = (x / (width / (int)maze.getMaze()[0].length)) * (width / (int)maze.getMaze()[0].length) + 30 + xSpeed;
+                
+    }
+    else if(x >= width - 50){
+      y -= 60;
+      x = width - 31;
+      xSpeed = -1;
+    }
+    else if(x <= 50){
+      y-= 60;
+      x = 31;
+      xSpeed = 1;
+    }
+    x+=xSpeed;
   }
   
   void relocate(){
