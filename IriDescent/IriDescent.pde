@@ -112,6 +112,14 @@ class Runner{
   }
   
   void tryJump(){
+    int leftBound = x - 30, rightBound = x + 30, downBound = y + 30;
+    int row = downBound / 60, col = leftBound / (width / (int)maze.getMaze()[0].length), col2 = rightBound / (width / (int)maze.getMaze()[0].length);
+    if( (leftBound - (col) * 60 <= 20) &&
+        (xSpeed == -1) && 
+        (maze.getMaze()[y / 60][col] == ' ')){
+          y -= 60;
+          x = (x / (width / (int)maze.getMaze()[0].length)) * (width / (int)maze.getMaze()[0].length) + 30 + xSpeed;
+    }
   }
   
   void relocate(){
