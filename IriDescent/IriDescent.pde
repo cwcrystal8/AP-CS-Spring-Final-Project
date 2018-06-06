@@ -69,6 +69,16 @@ class Runner{
   }
   
   void relocate(){
+    int leftBound = x - 30, rightBound = x + 30, upBound = y - 30, downBound = y + 30;
+    int row = downBound / 60, col = leftBound / (width / maze.getMaze()[0].length);
+    if(maze.getMaze()[row][col] == ' ' && leftBound % 60 == 0 && (y + 90 + num) < height){
+      y+= 60;
+    }
+    
+    if(rightBound >= width || leftBound <= 0){
+      xSpeed *= -1;
+    }
+    x += xSpeed;
   }
   
   void display(){
