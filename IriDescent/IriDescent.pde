@@ -60,6 +60,9 @@ class Runner{
   int x,y,xSpeed;
   
   Runner(){
+    x = width / 2;
+    y = 151;
+    relocate();
   }
   
   void tryJump(){
@@ -72,12 +75,15 @@ class Runner{
   }
   
   void setXSpeed(int num){
+    xSpeed = num;
   }
   
-  int getY(){ 
+  int getY(){
+    return y;
   }
   
   int getX(){
+    return x;
   }
 }
   
