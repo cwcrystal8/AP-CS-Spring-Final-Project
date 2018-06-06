@@ -71,8 +71,21 @@ class Maze{
       ans[row - 1][i] = '#';
       ans[i][0] = '#';
       ans[i][col - 1] = '#';
+      }
+    for(int i = col; i < row; i++){
+      ans[i][0] = '#';
+      ans[i][col - 1] = '#';
     }
-
+   for(int i = 1; i < row - 1; i++){
+      int start = (int)random(col - 1);
+      for(int j = 0; j < col; j++){
+        ans[i][j] = '#';
+        if(j == start){
+          j+=1;
+          ans[i][j] = ' ';
+        }
+      }
+    }
     
     for(char[] x: ans){
      // System.out.println(Arrays.toString(x));
