@@ -88,4 +88,14 @@ class Runner{
 }
   
 void keyPressed(){
+  if(keyCode == 37){
+    runner.setXSpeed(-1);
+  }
+  else if(keyCode == 39){
+    runner.setXSpeed(1);
+  }
+  else if(keyCode == 38){
+    runner.tryJump();
+  }
+  //System.out.println(keyCode);
 }
