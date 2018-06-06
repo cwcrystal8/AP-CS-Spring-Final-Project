@@ -57,19 +57,35 @@ void drawBackground(){
   }
 }
 
-class Maze(){
+class Maze{
   char[][] grid;
   
   Maze(){
+    grid = generateMaze(30,7);
   }
   
   char[][] generateMaze(int row, int col){
+    char[][] ans = new char[row][col];
+    for(int i = 0; i < col; i++){
+      ans[0][i] = '#';
+      ans[row - 1][i] = '#';
+      ans[i][0] = '#';
+      ans[i][col - 1] = '#';
+    }
+
+    
+    for(char[] x: ans){
+     // System.out.println(Arrays.toString(x));
+    }
+    return ans;
   }
   
   boolean isValidMaze(){
+    return false;
   }
   
   char[][] getMaze(){
+    return grid;
   }
 }
 
