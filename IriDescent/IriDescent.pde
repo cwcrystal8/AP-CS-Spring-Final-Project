@@ -21,7 +21,24 @@ void setup(){
 }
 
 void draw(){
-  drawBackground();
+  if(!gameOver){
+    if(runner.getY() - 30 <= -1 * num){
+      gameOver = true;
+    }
+      else{
+      pushMatrix();
+        translate(0,num);
+        drawBackground();
+        runner.relocate();
+        runner.display();
+      popMatrix();
+      if(updateRate % 4 == 0){
+        num--;
+        colorRate++;
+      }
+      updateRate++;
+     }
+  }
 }
 
 void drawBackground(){
