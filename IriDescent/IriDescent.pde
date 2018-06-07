@@ -4,7 +4,7 @@ int num, updateRate;
 Maze maze;
 Runner runner;
 boolean gameOver;
- int frameRates;
+int frameRates;
 int colorRate;
 ArrayList<Token> tokens;
 int yScale;
@@ -239,6 +239,9 @@ void keyPressed(){
   }
   else if(keyCode == 38){
     runner.tryJump();
+  }
+  else if(keyCode == 40){
+    runner.setXSpeed(0);
   }
   //System.out.println(keyCode);
 }
