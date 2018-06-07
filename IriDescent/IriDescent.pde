@@ -1,13 +1,10 @@
 import java.util.*;
 
-int num, updateRate;
+int num, updateRate, frameRates, colorRate, yScale;
 Maze maze;
 Runner runner;
-boolean gameOver;
-int frameRates;
-int colorRate;
+boolean gameOver, startGame;
 ArrayList<Token> tokens;
-int yScale;
 Token[][] tokenGrid;
 
 void setup(){
@@ -24,6 +21,7 @@ void setup(){
   yScale = width/maze.getMaze()[0].length;
   tokenGrid = new Token[maze.getMaze().length][maze.getMaze()[0].length];
   createTokens(maze.getMaze().length, maze.getMaze()[0].length);
+  startGame = false;
 }
 
 void createTokens(int row, int col){
@@ -42,7 +40,10 @@ void createTokens(int row, int col){
 }
 
 void draw(){
-  if(!gameOver){
+  if(!startGame){
+    startPage();
+  }
+  else if(!gameOver){
     if(runner.getY() - 30 <= -1 * num){
       drawBackground();
       runner.display();
@@ -71,6 +72,22 @@ void draw(){
       updateRate++;
      }
   }
+}
+
+void startPage(){
+  colorMode(HSB,360,100,100);
+  background(360 - colorRate % 360, 18, 100);
+  textSize(72);
+  //fill(colorRate % 360, 40, 100);
+  colorMode(RGB,255,255,255);
+  fill(255,182,193);
+  stroke(255,182,193);
+  text("IriDescent",40,100);
+  rect(110,250,200,70);
+  fill(0);
+  textSize(36);
+  text("Start Game",115,295);
+  colorRate++;
 }
 
 void drawBackground(){
