@@ -98,6 +98,25 @@ class GenerateMaze{
       }
   }
     }
+    
+  boolean isValidCol(int c){
+  return c >= 0 && c < cols;
+    }
+
+  boolean isValidRow(int r){
+  return r >= 0 && r < rows;
+    }
+
+  String toString(){
+  String str = "";
+  for (int i = 0; i < rows; i++){
+      for (int j = 0; j < cols; j++){
+    str += maze[i][j];
+      }
+      str += "\n";
+  }
+  return str;
+    }
   
 }
 
