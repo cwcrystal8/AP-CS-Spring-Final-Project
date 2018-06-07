@@ -44,6 +44,8 @@ void createTokens(int row, int col){
 void draw(){
   if(!gameOver){
     if(runner.getY() - 30 <= -1 * num){
+      drawBackground();
+      runner.display();
       gameOver = true;
     }
       else{
