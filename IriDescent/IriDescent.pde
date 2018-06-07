@@ -8,9 +8,11 @@ Runner runner;
 boolean gameOver, startGame, howToPlay, wonGame;
 ArrayList<Token> tokens;
 Token[][] tokenGrid;
+boolean pause;
 
 void setup(){
-  maze2 = new GenerateMaze(30,7);
+  maze2 = new GenerateMaze(200,7);
+  System.out.println(maze2);
   walls = new Walls(maze2);
   maze = new Maze(maze2);
   runner = new Runner();
@@ -30,6 +32,7 @@ void setup(){
   howToPlay = false;
   wonGame = false;
   finalScore = 0;
+  pause = false;
 }
 
 class GenerateMaze{
@@ -105,7 +108,7 @@ class GenerateMaze{
         }
     }
 
-    for (int n = 0; n < (int)(Math.random()*3); n++){
+    for (int n = 0; n < (int)(Math.random()*1); n++){
         int hole = (int)(Math.random()*cols);
         if (maze[i][hole] != '@'){
       maze[i][hole] = ' ';
@@ -235,6 +238,7 @@ void createTokens(int row, int col){
 }
 
 void draw(){
+  if(!pause){
   if(wonGame){
     winGamePage();
   }
@@ -260,6 +264,7 @@ void draw(){
         drawBackground();
         runner.relocate();
         runner.checkToken();
+        runner.checkWalls();
         colorMode(RGB,255,255,255);
         runner.display();
         for(int i = 0; i < tokenGrid.length; i++){
@@ -277,6 +282,7 @@ void draw(){
       }
       updateRate++;
      }
+  }
   }
 }
 
@@ -393,9 +399,9 @@ void drawBackground(){
   
   
   char[][] grid = maze.getMaze();
-  for(int i = 1; i < grid.length; i++){
+  for(int i = 0; i < grid.length; i++){
     for(int j = 0; j < grid[i].length; j++){
-      if(grid[i][j] != ' '){
+      if(grid[i][j] == '='){
         stroke(0);
         line( j * (width / grid[i].length), i * 60, (j + 1) * (width / grid[i].length), i * 60);
       }
@@ -404,7 +410,14 @@ void drawBackground(){
   
   grid = walls.getWalls();
   
-  
+  for(int i = 0; i <  grid.length; i++){
+    for(int j = 0; j < grid[i].length; j++){
+      if(grid[i][j] == '|'){
+        stroke(0);
+        line(j * (width / grid[i].length), i * 60 , j * (width / grid[i].length) , (i - 1) * 60 );
+      }
+    }
+  }
   
   textSize(20);
   fill(0);
@@ -509,8 +522,50 @@ class Runner{
       x = 31;
       xSpeed = 1;
     }
+    checkWalls();
     x+=xSpeed;
 
+  }
+  void checkWalls(){
+    char[][] grid = walls.getWalls();
+    int leftBound = x - 30, rightBound = x + 30, downBound = y + 30;
+    int row = downBound / 60;
+    if(xSpeed == 1 && leftBound % yScale == 0 && rightBound < width){
+      int col = rightBound / yScale;
+      if(grid[row][col] == '|'){
+        xSpeed = -1;
+      }
+    }
+    else if(xSpeed == -1 && leftBound % yScale == 0){
+      int col = leftBound / yScale;
+      if(grid[row][col] == '|'){
+        xSpeed = 1;
+      }
+    }
+    
+    if(xSpeed == 1 && (leftBound - 1) % yScale == 0 && rightBound < width){
+      int col = (rightBound - 1 ) / yScale;
+      if(grid[row][col] == '|'){
+        xSpeed = -1;
+      }
+    }
+    else if(xSpeed == -1 && (leftBound + 1) % yScale == 0){
+    int col = (leftBound + 1) / yScale;
+      if(grid[row][col] == '|'){
+        xSpeed = 1;
+      }
+    }
+    
+    /*
+    for(int i = 0; i <  grid.length; i++){
+    for(int j = 0; j < grid[i].length; j++){
+      if(grid[i][j] == '|'){
+        stroke(0);
+        line(j * (width / grid[i].length), i * 60 , j * (width / grid[i].length) , (i - 1) * 60 );
+      }
+    }
+  }
+    */
   }
   
   void relocate(){
@@ -528,6 +583,7 @@ class Runner{
       xSpeed = 1;
       x = 30;
     }
+    checkWalls();
     x += xSpeed;
   }
   
@@ -588,6 +644,9 @@ void keyPressed(){
   }
   else if(keyCode == 40){
     runner.setXSpeed(0);
+  }
+  else if(key == 'p'){
+    pause = !pause;
   }
   //System.out.println(keyCode);
 }
