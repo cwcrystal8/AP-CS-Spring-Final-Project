@@ -38,6 +38,7 @@ class GenerateMaze{
       clear();
       generatePath(0,(int)(Math.random()*cols));
       horizontalWalls();
+      verticalWalls();
   }
   //sets every cell to a single space
   void clear(){
@@ -98,6 +99,18 @@ class GenerateMaze{
       }
   }
     }
+    
+  void verticalWalls(){
+  for (int i = 0; i < rows; i++){
+    if (i%2 == 0){
+      int walls = 0;
+      int j = (int)(Math.random()*cols);
+      if (maze[i][j] != '@'){
+        maze[i][j] = '|';
+      }
+    }
+  }
+  }
     
   boolean isValidCol(int c){
   return c >= 0 && c < cols;
