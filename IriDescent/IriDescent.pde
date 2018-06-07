@@ -133,9 +133,12 @@ void howToPlayPage(){
   colorMode(RGB,255,255,255);
   fill(255,182,193);
   rect(110,450,200,70,12,12,12,12);
+  rect(10,10,100,50,12,12,12,12);
   fill(255);
   textSize(36);
   text("Start Game",115,498);
+  textSize(40);
+  text("Back",15,49);
 }
 
 void drawBackground(){
@@ -420,4 +423,8 @@ void mouseClicked(){
     colorRate = 0;
     startTime = millis();
   }
+  else if(!startGame && howToPlay && mouseX > 10 && mouseX < 110 && mouseY > 10 && mouseY < 60){
+    howToPlay = false;
+  }
+  //rect(10,10,100,50,12,12,12,12);
 }
