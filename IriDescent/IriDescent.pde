@@ -28,11 +28,17 @@ void setup(){
 
 void createTokens(int row, int col){
   for(int i = 1; i < row; i++){
-      int j = (int)random(col);
-      if(i % 5 == 0){
-          tokenGrid[i][j] = new SpeedBoost(i,j);
-      }
-   }
+    int j = (int)random(col);
+    if(i % 5 == 0){
+      tokenGrid[i][j] = new SpeedBoost(i,j);
+    }
+  }
+  for(int i = 1; i < row; i++){
+    int j = (int)random(col);
+    if(i % 5 == 3){
+      tokenGrid[i][j] = new SpeedSlower(i,j);
+    }
+  }
 }
 
 void draw(){
@@ -205,7 +211,7 @@ class Runner{
   void checkToken(){
     int row = (y - 30) / 60, col = (x - 15) / yScale;
     Token tok = tokenGrid[row][col];
-    if(tok != null && tok.getType().equals("Speed")){
+    if(tok != null){
       tok.activate();
       tokenGrid[row][col] = null;
     }
@@ -282,11 +288,34 @@ class SpeedBoost extends Token{
     fill(255);
     ellipse(getCols() * yScale + 15,getRows() * 60 + 30,40,40);
     fill(0,182,193);
-    text("Speed",getCols() * yScale - 1, getRows() * 60 + 34);
+    text("Fast",getCols() * yScale + 4 , getRows() * 60 + 35);
   }
   
   void activate(){
     frameRates+=4;
+    frameRate(116 + frameRates * 10);
+  }
+}
+
+class SpeedSlower extends Token{
+  SpeedSlower(int row, int col){
+   setRows(row);
+   setCols(col);
+   setType("Slow");  
+  }
+  
+  void display(){
+    fill(255);
+    ellipse(getCols() * yScale + 20,getRows() * 60 + 30,40,40);
+    fill(0,182,193);
+    text("Slow",getCols() * yScale + 8, getRows() * 60 + 35);
+  }
+  
+  void activate(){
+    frameRates-=4;
+    if(frameRates <= 0){
+      frameRates = 4;
+    }
     frameRate(116 + frameRates * 10);
   }
 }
