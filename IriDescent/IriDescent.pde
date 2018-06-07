@@ -38,7 +38,8 @@ class GenerateMaze{
       clear();
       generatePath(0,(int)(Math.random()*cols));
       horizontalWalls();
-      verticalWalls();
+      verticalWalls1();
+      verticalWalls2();
   }
   //sets every cell to a single space
   void clear(){
@@ -100,17 +101,40 @@ class GenerateMaze{
   }
     }
     
-  void verticalWalls(){
+    public void verticalWalls1(){
   for (int i = 0; i < rows; i++){
-    if (i%2 == 0){
-      int walls = 0;
-      int j = (int)(Math.random()*cols);
-      if (maze[i][j] != '@'){
+      if (i%2 == 0){
+    int walls = 0;
+    int j = (int)(Math.random()*cols);
+    if (maze[i][j] != '@'){
         maze[i][j] = '|';
-      }
     }
+    if (unreachableLeft(i, j) && j > 0){
+        maze[i+1][j-1] = ' ';
+    }
+    if (unreachableRight(i, j) && j < cols-1){
+        maze[i+1][j+1] = ' ';
+    }
+      }
   }
+    }
+
+  void verticalWalls2(){
+  for (int i = 0; i < rows; i++){
+      if (i%2 == 0){
+    int j = (int)(Math.random()*cols);
+    if (maze[i][j] != '@'){
+        maze[i][j] = '|';
+    }
+    if (unreachableLeft(i, j) && j > 0 && i > 0){
+        maze[i-1][j-1] = ' ';
+    }
+    if (unreachableRight(i, j) && j < cols-1 && i > 0){
+        maze[i-1][j+1] = ' ';
+    }
+      }
   }
+    }
   
   boolean unreachableLeft(int r, int col){
   int rowAbove = r - 1;
