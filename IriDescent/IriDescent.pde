@@ -40,6 +40,7 @@ class GenerateMaze{
       horizontalWalls();
       verticalWalls1();
       verticalWalls2();
+      clearPath();
   }
   //sets every cell to a single space
   void clear(){
@@ -79,7 +80,16 @@ class GenerateMaze{
       generatePath(r+2, end);
   }
     }
-  
+
+   void clearPath(){
+  for (int i = 0; i < rows; i++){
+      for (int j = 0; j < cols; j++){
+    if (maze[i][j] == '@'){
+        maze[i][j] = ' ';
+    }
+      }
+  }
+    }  
   
   void horizontalWalls(){
   for (int i = 0; i < rows; i++){
