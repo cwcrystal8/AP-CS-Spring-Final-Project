@@ -4,9 +4,11 @@ int num, updateRate;
 Maze maze;
 Runner runner;
 boolean gameOver;
-int[][] colors = {{255,214,214},{250,255,176},{192,255,182},{208,221,255},{225,191,255}};
-int[][] lineColors = {{255,0,0},{255,127,0},{0,255,0},{0,0,255},{148,0,21}}; 
+ int frameRates;
 int colorRate;
+ArrayList<Token> tokens;
+int yScale;
+Token[][] tokenGrid;
 
 void setup(){
   maze = new Maze();
@@ -18,6 +20,19 @@ void setup(){
   num = -1;
   updateRate = 0;
   colorRate = 0; 
+  frameRates = 4;
+  yScale = width/maze.getMaze()[0].length;
+  tokenGrid = new Token[maze.getMaze().length][maze.getMaze()[0].length];
+  createTokens(maze.getMaze().length, maze.getMaze()[0].length);
+}
+
+void createTokens(int row, int col){
+  for(int i = 1; i < row; i++){
+      int j = (int)random(col);
+      if(i % 5 == 0){
+          tokenGrid[i][j] = new SpeedBoost(i,j);
+      }
+   }
 }
 
 void draw(){
@@ -30,11 +45,20 @@ void draw(){
         translate(0,num);
         drawBackground();
         runner.relocate();
+        runner.checkToken();
+        colorMode(RGB,255,255,255);
         runner.display();
+        for(int i = 0; i < tokenGrid.length; i++){
+          for(int j = 0; j < tokenGrid[0].length; j++){
+            if(tokenGrid[i][j] != null){
+              tokenGrid[i][j].display();
+            }
+          }
+        }
       popMatrix();
-      if(updateRate % 4 == 0){
+      if(updateRate % frameRates == 0){
         num--;
-        colorRate++;
+        //colorRate++;
       }
       updateRate++;
      }
@@ -42,19 +66,18 @@ void draw(){
 }
 
 void drawBackground(){
-    int[] color1 = colors[(colorRate / 60) / (maze.getMaze().length / colors.length)];
-  int[] color2 = lineColors[(colorRate / 60) / (maze.getMaze().length / colors.length)];
-  background(color1[0],color1[1],color1[2]);
-  //background(168,255,255);
+  colorMode(HSB,360,100,100);
+  background(360 - colorRate % 360, 18, 100);
   char[][] grid = maze.getMaze();
   for(int i = 0; i < grid.length; i++){
     for(int j = 0; j < grid[i].length; j++){
       if(grid[i][j] != ' '){
-        stroke(color2[0],color2[1],color2[2]);
+        stroke(0);
         line( j * (width / grid[i].length), i * 60, (j + 1) * (width / grid[i].length), i* 60);
       }
     }
   }
+  colorRate++;
 }
 
 class Maze{
@@ -114,37 +137,41 @@ class Runner{
   void tryJump(){
     int leftBound = x - 30, rightBound = x + 30, downBound = y + 30;
     int row = downBound / 60, col = leftBound / (width / (int)maze.getMaze()[0].length), col2 = rightBound / (width / (int)maze.getMaze()[0].length);
-    if( (leftBound - (col) * 60 <= 20) &&
+    if( (leftBound - (col) * 60 <= 30) &&
         (xSpeed == -1) && 
         (maze.getMaze()[y / 60][col] == ' ')){
+          //System.out.println("this one");
           y -= 60;
           x = (x / (width / (int)maze.getMaze()[0].length)) * (width / (int)maze.getMaze()[0].length) + 30 + xSpeed;
     }
-    else if( (col2 + 1) * 60 - rightBound <= 20 &&
+    else if( (col2 + 1) * 60 - rightBound <= 30 &&
               (xSpeed == 1) && 
               (maze.getMaze()[y / 60][col2] == ' ')){
+          
+                y -= 60;
+          x = (x / (width / (int)maze.getMaze()[0].length)) * (width / (int)maze.getMaze()[0].length) + 30 + xSpeed;
+                
+    }
+        else if( (col2 + 1) * 60 - rightBound <= 30 &&
+              (xSpeed == 1) && 
+              (maze.getMaze()[y / 60][col2] == ' ')){
+                
           y -= 60;
           x = (x / (width / (int)maze.getMaze()[0].length)) * (width / (int)maze.getMaze()[0].length) + 30 + xSpeed;
                 
     }
-        else if( (col2 + 1) * 60 - rightBound <= 20 &&
-              (xSpeed == 1) && 
-              (maze.getMaze()[y / 60][col2] == ' ')){
-          y -= 60;
-          x = (x / (width / (int)maze.getMaze()[0].length)) * (width / (int)maze.getMaze()[0].length) + 30 + xSpeed;
-                
-    }
-    else if(x >= width - 50){
+    else if(x >= width - 60 && maze.getMaze()[y / 60][maze.getMaze()[0].length - 1] == ' '){
       y -= 60;
       x = width - 31;
       xSpeed = -1;
     }
-    else if(x <= 50){
+    else if(x <= 60 && maze.getMaze()[y / 60][0] == ' '){
       y-= 60;
       x = 31;
       xSpeed = 1;
     }
     x+=xSpeed;
+
   }
   
   void relocate(){
