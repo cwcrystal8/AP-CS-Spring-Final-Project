@@ -1,14 +1,18 @@
 import java.util.*;
 
 int num, updateRate, frameRates, colorRate, yScale, startTime, finalScore;
+GenerateMaze maze2;
 Maze maze;
+Walls walls;
 Runner runner;
 boolean gameOver, startGame, howToPlay, wonGame;
 ArrayList<Token> tokens;
 Token[][] tokenGrid;
 
 void setup(){
-  maze = new Maze();
+  maze2 = new GenerateMaze(30,7);
+  walls = new Walls(maze2);
+  maze = new Maze(maze2);
   runner = new Runner();
   frameRate(120);
   size(420,600);
@@ -208,6 +212,10 @@ class GenerateMaze{
   }
   return str;
     }
+    
+    char[][] getMaze(){
+      return maze;
+    }
   
 }
 
@@ -380,15 +388,24 @@ void gameOverPage(){
 void drawBackground(){
   colorMode(HSB,360,100,100);
   background(360 - colorRate % 360, 18, 100);
+  
+  
+  
+  
   char[][] grid = maze.getMaze();
-  for(int i = 0; i < grid.length; i++){
+  for(int i = 1; i < grid.length; i++){
     for(int j = 0; j < grid[i].length; j++){
       if(grid[i][j] != ' '){
         stroke(0);
-        line( j * (width / grid[i].length), i * 60, (j + 1) * (width / grid[i].length), i* 60);
+        line( j * (width / grid[i].length), i * 60, (j + 1) * (width / grid[i].length), i * 60);
       }
     }
   }
+  
+  grid = walls.getWalls();
+  
+  
+  
   textSize(20);
   fill(0);
   text("" + (millis() - startTime), 10, 30 + -1 * num);
@@ -396,45 +413,51 @@ void drawBackground(){
   colorRate++;
 }
 
+class Walls{
+  char[][] grid;
+  
+   Walls(GenerateMaze m){
+     grid = generateWalls(m);
+   }
+   
+   char[][] generateWalls(GenerateMaze m){
+    char[][] grid2 = m.getMaze();
+    char[][] ans = new char[grid2.length / 2][grid2[0].length];
+    
+    for(int i = 0; i < grid2.length; i+=2){
+      for(int j = 0; j < grid2[i].length; j++){
+        ans[i/2][j] = grid2[i][j];
+      }
+    }
+    return ans;
+   }
+   
+   char[][] getWalls(){
+     return grid;
+   }
+  
+}
+
+
 class Maze{
   char[][] grid;
   
-  Maze(){
-    grid = generateMaze(30,7);
+  Maze(GenerateMaze m){
+    grid = generateMaze(m);
   }
   
-  char[][] generateMaze(int row, int col){
-    char[][] ans = new char[row][col];
-    for(int i = 0; i < col; i++){
-      ans[0][i] = '#';
-      ans[row - 1][i] = '#';
-      ans[i][0] = '#';
-      ans[i][col - 1] = '#';
-      }
-    for(int i = col; i < row; i++){
-      ans[i][0] = '#';
-      ans[i][col - 1] = '#';
-    }
-   for(int i = 1; i < row - 1; i++){
-      int start = (int)random(col - 1);
-      for(int j = 0; j < col; j++){
-        ans[i][j] = '#';
-        if(j == start){
-          j+=1;
-          ans[i][j] = ' ';
-        }
-      }
-    }
+  char[][] generateMaze(GenerateMaze m){
+    char[][] grid2 = m.getMaze();
+    char[][] ans = new char[grid2.length / 2][grid2[0].length];
     
-    for(char[] x: ans){
-     // System.out.println(Arrays.toString(x));
+    for(int i = 1; i < grid2.length; i+=2){
+      for(int j = 0; j < grid2[i].length; j++){
+        ans[i/2][j] = grid2[i][j];
+      }
     }
     return ans;
   }
   
-  boolean isValidMaze(){
-    return false;
-  }
   
   char[][] getMaze(){
     return grid;
@@ -685,7 +708,8 @@ void mouseClicked(){
     startGame = true;
     howToPlay = false;
     textSize(12);
-    maze = new Maze();
+      maze2 = new GenerateMaze(30,7);
+  maze = new Maze(maze2);
     runner = new Runner();
     frameRate(120);
     gameOver = false;
@@ -699,6 +723,7 @@ void mouseClicked(){
     howToPlay = false;
     wonGame = false;
     finalScore = 0;
+    walls = new Walls(maze2);
     startTime = millis();
   }
   
