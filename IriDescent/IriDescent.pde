@@ -1,6 +1,6 @@
 import java.util.*;
 
-int num, updateRate, frameRates, colorRate, yScale;
+int num, updateRate, frameRates, colorRate, yScale, time;
 Maze maze;
 Runner runner;
 boolean gameOver, startGame;
@@ -22,6 +22,7 @@ void setup(){
   tokenGrid = new Token[maze.getMaze().length][maze.getMaze()[0].length];
   createTokens(maze.getMaze().length, maze.getMaze()[0].length);
   startGame = false;
+  time = 0;
 }
 
 void createTokens(int row, int col){
@@ -84,9 +85,11 @@ void startPage(){
   stroke(255,182,193);
   text("IriDescent",40,100);
   rect(110,250,200,70);
+  rect(110,350,200,70);
   fill(0);
   textSize(36);
-  text("Start Game",115,295);
+  text("Start Game",115,298);
+  text("High Score",115,398);
   colorRate++;
 }
 
@@ -339,5 +342,13 @@ class SpeedSlower extends Token{
       frameRates = 4;
     }
     frameRate(116 + frameRates * 10);
+  }
+}
+
+void mouseClicked(){
+  //rect(110,250,200,70);
+  if(mouseX > 110 && mouseX < 310 && mouseY > 250 && mouseY < 320){
+    startGame = true;
+    textSize(12);
   }
 }
