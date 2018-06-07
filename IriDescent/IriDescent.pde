@@ -37,6 +37,7 @@ class GenerateMaze{
       maze = new char[r][c];
       clear();
       generatePath(0,(int)(Math.random()*cols));
+      horizontalWalls();
   }
   //sets every cell to a single space
   void clear(){
@@ -74,6 +75,27 @@ class GenerateMaze{
       //System.out.println("---------------------------");
       // System.out.println("the start col is: " + c
       generatePath(r+2, end);
+  }
+    }
+  
+  
+  void horizontalWalls(){
+  for (int i = 0; i < rows; i++){
+      if (i%2 != 0){
+
+    for (int j = 0; j<cols; j++){
+        if (maze[i][j] != '@'){
+      maze[i][j] = '=';
+        }
+    }
+
+    for (int n = 0; n < (int)(Math.random()*3); n++){
+        int hole = (int)(Math.random()*cols);
+        if (maze[i][hole] != '@'){
+      maze[i][hole] = ' ';
+        }
+    }
+      }
   }
     }
   
