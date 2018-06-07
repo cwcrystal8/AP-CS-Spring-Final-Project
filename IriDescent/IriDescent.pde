@@ -178,7 +178,7 @@ class Runner{
     int leftBound = x - 30, rightBound = x + 30, upBound = y - 30, downBound = y + 30;
     int row = downBound / 60, col = leftBound / (width / maze.getMaze()[0].length);
     if(maze.getMaze()[row][col] == ' ' && leftBound % 60 == 0 && (y + 90 + num) < height){
-      y+= 60;
+      fallDown();
     }
     
     if(rightBound >= width || leftBound <= 0){
@@ -187,10 +187,28 @@ class Runner{
     x += xSpeed;
   }
   
+  void fallDown(){
+    for(int i = 0; i < 30; i++){
+      y+=2;
+      drawBackground();
+      updateRate--;
+      display();
+    }
+  }
+  
   void display(){
     fill(255,182,193);
     stroke(255,182,193);
     ellipse(x,y,60,55);
+  }
+  
+  void checkToken(){
+    int row = (y - 30) / 60, col = (x - 15) / yScale;
+    Token tok = tokenGrid[row][col];
+    if(tok != null && tok.getType().equals("Speed")){
+      tok.activate();
+      tokenGrid[row][col] = null;
+    }
   }
   
   void setXSpeed(int num){
@@ -217,4 +235,58 @@ void keyPressed(){
     runner.tryJump();
   }
   //System.out.println(keyCode);
+}
+
+
+abstract class Token{
+  int row, col;
+  String type;
+  
+  abstract void display();
+  abstract void activate();
+  
+  String getType(){
+    return type;
+  }
+  
+ int getRows(){
+   return row;
+ }
+ 
+ int getCols(){
+   return col;
+ }
+ 
+ void setType(String s){
+   type = s;
+ }
+ 
+ void setRows(int n){
+   row = n;
+ }
+ 
+ void setCols(int n){
+   col = n;
+ }
+  
+}
+
+class SpeedBoost extends Token{
+  SpeedBoost(int row, int col){
+   setRows(row);
+   setCols(col);
+   setType("Speed");  
+  }
+  
+  void display(){
+    fill(255);
+    ellipse(getCols() * yScale + 15,getRows() * 60 + 30,40,40);
+    fill(0,182,193);
+    text("Speed",getCols() * yScale - 1, getRows() * 60 + 34);
+  }
+  
+  void activate(){
+    frameRates+=4;
+    frameRate(116 + frameRates * 10);
+  }
 }
