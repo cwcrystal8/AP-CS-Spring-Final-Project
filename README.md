@@ -23,6 +23,26 @@ How to play:
 Good luck!
 
 ## Development Log
+## 06/07
+Completed:
+ * Tokens to speed up/slow down
+ * Score in the top
+ * Start page
+ * How to Play page
+ * End of game page
+~~~~~~~
+~~~~~~~
+In Progress:
+ * Maze generation
+ * Transportation portals
+~~~~~~~
+~~~~~~~
+Pending:
+ * High score board
+ * Levels of difficulty
+~~~~~~~
+~~~~~~~
+Notes: We made a lot of progress today! We added several pages to navigate between the end of the game and the start menu, etc.
 
 ## 06/06
 Completed:
