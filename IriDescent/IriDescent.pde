@@ -1,9 +1,9 @@
 import java.util.*;
 
-int num, updateRate, frameRates, colorRate, yScale, time;
+int num, updateRate, frameRates, colorRate, yScale, startTime;
 Maze maze;
 Runner runner;
-boolean gameOver, startGame;
+boolean gameOver, startGame, howToPlay;
 ArrayList<Token> tokens;
 Token[][] tokenGrid;
 
@@ -22,7 +22,8 @@ void setup(){
   tokenGrid = new Token[maze.getMaze().length][maze.getMaze()[0].length];
   createTokens(maze.getMaze().length, maze.getMaze()[0].length);
   startGame = false;
-  time = 0;
+  startTime = 0;
+  howToPlay = false;
 }
 
 void createTokens(int row, int col){
@@ -41,10 +42,13 @@ void createTokens(int row, int col){
 }
 
 void draw(){
-  if(!startGame){
+  if(!startGame && !howToPlay){
     startPage();
   }
-  else if(!gameOver){
+  else if(!startGame && howToPlay){
+    howToPlayPage();
+  }
+  else if(!gameOver && !howToPlay){
     if(runner.getY() - 30 <= -1 * num){
       drawBackground();
       runner.display();
@@ -81,16 +85,57 @@ void startPage(){
   textSize(72);
   //fill(colorRate % 360, 40, 100);
   colorMode(RGB,255,255,255);
-  fill(255,182,193);
+  fill(0,182,193);
   stroke(255,182,193);
   text("IriDescent",40,100);
-  rect(110,250,200,70);
-  rect(110,350,200,70);
-  fill(0);
+  fill(255,182,193);
+  rect(110,250,200,70,12,12,12,12);
+  rect(110,350,200,70,12,12,12,12);
+  rect(110,450,200,70,12,12,12,12);
+  fill(255);
   textSize(36);
   text("Start Game",115,298);
   text("High Score",115,398);
+  textSize(33);
+  text("How to Play",115,498);
   colorRate++;
+}
+
+void howToPlayPage(){
+  colorMode(HSB,360,100,100);
+  background(360 - colorRate % 360, 18, 100);
+  fill(0);
+  textSize(60);
+  text("How to Play",40,150);
+  String s = "1. Press start to start a game.";
+  textSize(12);
+  text(s,20,200);
+  s = "2. The randomly generated maze will show. You are the pink circle.";
+  text(s,20,220);
+  s = "3. Control the runner with the arrow keys.";
+  text(s,20,240);
+  s = "  * Left will switch the runner's direction to the left";
+  text(s,20,260);
+  s = "  * Right will switch the runner's direction to the right";
+  text(s,20,280);
+  s = "  * Up will make the runner jump up if it isn't blocked by a wall";
+  text(s,20,300);
+  s = "  * Down will make the runner stay still";
+  text(s,20,320);
+  s = "4. If you reach the top of the screen, the game is over.";
+  text(s,20,340);
+  s = "5. If you reach the bottom of the maze, you win!";
+  text(s,20,360);
+  s = "6. Try to win the maze as fast as possible! :)";
+  text(s,20,380);
+  s = "Good luck!";
+  text(s,20,400);
+  colorMode(RGB,255,255,255);
+  fill(255,182,193);
+  rect(110,450,200,70,12,12,12,12);
+  fill(255);
+  textSize(36);
+  text("Start Game",115,498);
 }
 
 void drawBackground(){
@@ -105,6 +150,10 @@ void drawBackground(){
       }
     }
   }
+  textSize(20);
+  fill(0);
+  text("" + (millis() - startTime), 10, 30 + -1 * num);
+  textSize(12);
   colorRate++;
 }
 
@@ -209,8 +258,13 @@ class Runner{
       fallDown();
     }
     
-    if(rightBound >= width || leftBound <= 0){
-      xSpeed *= -1;
+    if(rightBound >= width){
+      xSpeed = -1;
+      x = width - 30;
+    }
+    else if(leftBound <= 0){
+      xSpeed = 1;
+      x = 30;
     }
     x += xSpeed;
   }
@@ -347,8 +401,23 @@ class SpeedSlower extends Token{
 
 void mouseClicked(){
   //rect(110,250,200,70);
-  if(mouseX > 110 && mouseX < 310 && mouseY > 250 && mouseY < 320){
+  if(!startGame && !howToPlay && mouseX > 110 && mouseX < 310 && mouseY > 250 && mouseY < 320){
     startGame = true;
+    howToPlay = false;
     textSize(12);
+    colorRate = 0;
+    startTime = millis();
+  }
+  else if(!startGame && !howToPlay && mouseX > 110 && mouseX < 310 && mouseY > 450 && mouseY < 520){
+    howToPlay = true;
+    howToPlayPage();
+    textSize(12);
+  }
+ else if(!startGame && howToPlay && mouseX > 110 && mouseX < 310 && mouseY > 450 && mouseY < 520){
+    startGame = true;
+    howToPlay = false;
+    textSize(12);
+    colorRate = 0;
+    startTime = millis();
   }
 }
