@@ -24,7 +24,7 @@ void setup(){
   startGame = false;
   startTime = 0;
   howToPlay = false;
-  wonGame = true;
+  wonGame = false;
   finalScore = 0;
 }
 
@@ -52,6 +52,9 @@ void draw(){
   }
   else if(!startGame && howToPlay){
     howToPlayPage();
+  }
+  else if(gameOver){
+    gameOverPage();
   }
   else if(!gameOver && !howToPlay && !wonGame){
     if(runner.getY() - 30 <= -1 * num){
@@ -169,6 +172,26 @@ void winGamePage(){
   text("High Scores",115,498);
   colorRate++;
   
+}
+
+void gameOverPage(){
+  colorMode(HSB,360,100,100);
+  background(360 - colorRate % 360, 18, 100);
+  textSize(60);
+  fill(0);
+  text("Final Score",40,150);
+  text("" + finalScore, 40, 250);
+  colorMode(RGB,255,255,255);
+  fill(255,182,193);
+  stroke(255,182,193);
+  rect(110,350,200,70,12,12,12,12);
+  rect(110,450,200,70,12,12,12,12);
+  fill(255);
+  textSize(36);
+  text("New Game",115,398);
+  textSize(33);
+  text("High Scores",115,498);
+  colorRate++;
 }
 
 void drawBackground(){
@@ -477,9 +500,29 @@ void mouseClicked(){
   else if(wonGame && mouseX > 110 && mouseX < 310 && mouseY > 450 && mouseY < 520){
     //high Score  
   }
-  else if(wonGame && mouseX > 110 && mouseX < 310 && mouseY > 350 && mouseY < 420){
-    wonGame = false;
+  else if((wonGame || gameOver) && mouseX > 110 && mouseX < 310 && mouseY > 350 && mouseY < 420){
+   
     startGame = true;
+    finalScore = 0;
+    colorRate = 0;
+    startGame = true;
+    howToPlay = false;
+    textSize(12);
+    maze = new Maze();
+    runner = new Runner();
+    frameRate(120);
+    gameOver = false;
+    num = -1;
+    updateRate = 0;
+    colorRate = 0; 
+    frameRates = 4;
+    yScale = width/maze.getMaze()[0].length;
+    tokenGrid = new Token[maze.getMaze().length][maze.getMaze()[0].length];
+    createTokens(maze.getMaze().length, maze.getMaze()[0].length);
+    howToPlay = false;
+    wonGame = false;
+    finalScore = 0;
+    startTime = millis();
   }
   
 }
