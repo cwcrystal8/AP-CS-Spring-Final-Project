@@ -1,9 +1,9 @@
 import java.util.*;
 
-int num, updateRate, frameRates, colorRate, yScale, startTime;
+int num, updateRate, frameRates, colorRate, yScale, startTime, finalScore;
 Maze maze;
 Runner runner;
-boolean gameOver, startGame, howToPlay;
+boolean gameOver, startGame, howToPlay, wonGame;
 ArrayList<Token> tokens;
 Token[][] tokenGrid;
 
@@ -24,6 +24,8 @@ void setup(){
   startGame = false;
   startTime = 0;
   howToPlay = false;
+  wonGame = true;
+  finalScore = 0;
 }
 
 void createTokens(int row, int col){
@@ -42,17 +44,21 @@ void createTokens(int row, int col){
 }
 
 void draw(){
-  if(!startGame && !howToPlay){
+  if(wonGame){
+    winGamePage();
+  }
+  else if(!startGame && !howToPlay){
     startPage();
   }
   else if(!startGame && howToPlay){
     howToPlayPage();
   }
-  else if(!gameOver && !howToPlay){
+  else if(!gameOver && !howToPlay && !wonGame){
     if(runner.getY() - 30 <= -1 * num){
       drawBackground();
       runner.display();
       gameOver = true;
+      gameOverPage();
     }
       else{
       pushMatrix();
@@ -69,6 +75,7 @@ void draw(){
             }
           }
         }
+        runner.checkWin();
       popMatrix();
       if(updateRate % frameRates == 0){
         num--;
@@ -139,6 +146,29 @@ void howToPlayPage(){
   text("Start Game",115,498);
   textSize(40);
   text("Back",15,49);
+  colorRate++;
+}
+
+
+void winGamePage(){
+  colorMode(HSB,360,100,100);
+  background(360 - colorRate % 360, 18, 100);
+  textSize(60);
+  fill(0);
+  text("Final Score",40,150);
+  text("" + finalScore, 40, 250);
+  colorMode(RGB,255,255,255);
+  fill(255,182,193);
+  stroke(255,182,193);
+  rect(110,350,200,70,12,12,12,12);
+  rect(110,450,200,70,12,12,12,12);
+  fill(255);
+  textSize(36);
+  text("New Game",115,398);
+  textSize(33);
+  text("High Scores",115,498);
+  colorRate++;
+  
 }
 
 void drawBackground(){
@@ -296,6 +326,14 @@ class Runner{
     }
   }
   
+  void checkWin(){
+    char[][] grid = maze.getMaze();
+    if(grid.length == 1 + (y + 30) / 60){
+      wonGame = true;
+      finalScore = millis() - startTime;
+    }
+  }
+  
   void setXSpeed(int num){
     xSpeed = num;
   }
@@ -403,28 +441,38 @@ class SpeedSlower extends Token{
 }
 
 void mouseClicked(){
-  //rect(110,250,200,70);
-  if(!startGame && !howToPlay && mouseX > 110 && mouseX < 310 && mouseY > 250 && mouseY < 320){
+  
+  if(!wonGame && !startGame && !howToPlay && mouseX > 110 && mouseX < 310 && mouseY > 250 && mouseY < 320){
     startGame = true;
     howToPlay = false;
     textSize(12);
     colorRate = 0;
     startTime = millis();
   }
-  else if(!startGame && !howToPlay && mouseX > 110 && mouseX < 310 && mouseY > 450 && mouseY < 520){
+  else if(!wonGame && !startGame && !howToPlay && mouseX > 110 && mouseX < 310 && mouseY > 350 && mouseY < 420){
+    //High score board
+  }
+  else if(!wonGame && !startGame && !howToPlay && mouseX > 110 && mouseX < 310 && mouseY > 450 && mouseY < 520){
     howToPlay = true;
     howToPlayPage();
     textSize(12);
   }
- else if(!startGame && howToPlay && mouseX > 110 && mouseX < 310 && mouseY > 450 && mouseY < 520){
+ else if(!wonGame && !startGame && howToPlay && mouseX > 110 && mouseX < 310 && mouseY > 450 && mouseY < 520){
     startGame = true;
     howToPlay = false;
     textSize(12);
     colorRate = 0;
     startTime = millis();
   }
-  else if(!startGame && howToPlay && mouseX > 10 && mouseX < 110 && mouseY > 10 && mouseY < 60){
+  else if(!wonGame && !startGame && howToPlay && mouseX > 10 && mouseX < 110 && mouseY > 10 && mouseY < 60){
     howToPlay = false;
   }
-  //rect(10,10,100,50,12,12,12,12);
+  else if(wonGame && mouseX > 110 && mouseX < 310 && mouseY > 450 && mouseY < 520){
+    //high Score  
+  }
+  else if(wonGame && mouseX > 110 && mouseX < 310 && mouseY > 350 && mouseY < 420){
+    wonGame = false;
+    startGame = true;
+  }
+  
 }
