@@ -133,6 +133,28 @@ class GenerateMaze{
   }
   return true;
     }
+
+ boolean unreachableRight(int r, int col){
+  int rowAbove = r - 1;
+  int rowBelow = r + 1;
+
+  if (isValidRow(rowAbove)){
+      for (int c = col; c < cols && maze[r][c] != '|'; c++){
+    if (maze[rowAbove][c] == '@' || maze[rowAbove][c] == ' '){
+        return false;
+    }
+      }
+  }
+
+  if (isValidRow(rowBelow)){  
+      for (int c = col; c < cols && maze[r][c] != '|'; c++){
+    if (maze[rowBelow][c] == '@' || maze[rowBelow][c] == ' '){
+        return false;
+    }
+      }
+  }
+  return true;
+    }
     
   boolean isValidCol(int c){
   return c >= 0 && c < cols;
