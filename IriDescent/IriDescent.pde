@@ -58,7 +58,7 @@ void draw(){
       drawBackground();
       runner.display();
       gameOver = true;
-      gameOverPage();
+      //gameOverPage();
     }
       else{
       pushMatrix();
@@ -363,6 +363,13 @@ void keyPressed(){
   //System.out.println(keyCode);
 }
 
+class GenerateMaze{
+  int rows, cols;
+  char[][] maze;
+  GenerateMaze(int r, int c){
+      
+  }
+}
 
 abstract class Token{
   int row, col;
