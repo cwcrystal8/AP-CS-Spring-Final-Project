@@ -12,7 +12,7 @@ boolean pause;
 
 void setup(){
   maze2 = new GenerateMaze(200,7);
-  System.out.println(maze2);
+  //System.out.println(maze2);
   walls = new Walls(maze2);
   maze = new Maze(maze2);
   runner = new Runner();
@@ -45,6 +45,7 @@ class GenerateMaze{
       clear();
       generatePath(0,(int)(Math.random()*cols));
       horizontalWalls();
+      verticalWalls1();
       verticalWalls1();
       verticalWalls2();
       clearPath();
@@ -108,7 +109,7 @@ class GenerateMaze{
         }
     }
 
-    for (int n = 0; n < (int)(Math.random()*1); n++){
+    for (int n = 0; n < (int)(Math.random()*.5); n++){
         int hole = (int)(Math.random()*cols);
         if (maze[i][hole] != '@'){
       maze[i][hole] = ' ';
@@ -695,9 +696,9 @@ class SpeedBoost extends Token{
   
   void display(){
     fill(255);
-    ellipse(getCols() * yScale + 15,getRows() * 60 + 30,40,40);
+    ellipse(getCols() * yScale + 30,getRows() * 60 + 30,40,40);
     fill(0,182,193);
-    text("Fast",getCols() * yScale + 4 , getRows() * 60 + 35);
+    text("Fast",getCols() * yScale + 19 , getRows() * 60 + 35);
   }
   
   void activate(){
@@ -715,9 +716,9 @@ class SpeedSlower extends Token{
   
   void display(){
     fill(255);
-    ellipse(getCols() * yScale + 20,getRows() * 60 + 30,40,40);
+    ellipse(getCols() * yScale + 30,getRows() * 60 + 30,40,40);
     fill(0,182,193);
-    text("Slow",getCols() * yScale + 8, getRows() * 60 + 35);
+    text("Slow",getCols() * yScale + 18, getRows() * 60 + 35);
   }
   
   void activate(){
