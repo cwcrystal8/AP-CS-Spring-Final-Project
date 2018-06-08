@@ -523,7 +523,11 @@ class Runner{
       x = 31;
       xSpeed = 1;
     }
+    int original = xSpeed;
     checkWalls();
+    /*if (xSpeed != original){
+      x+=xSpeed;
+    }*/
     x+=xSpeed;
 
   }
@@ -556,6 +560,7 @@ class Runner{
         xSpeed = 1;
       }
     }
+    //x+=xSpeed;
     
     /*
     for(int i = 0; i <  grid.length; i++){
