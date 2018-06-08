@@ -578,11 +578,11 @@ class Runner{
     
     if(rightBound >= width){
       xSpeed = -1;
-      x = width - 30;
+      x = width - 31;
     }
     else if(leftBound <= 0){
       xSpeed = 1;
-      x = 30;
+      x = 31;
     }
     checkWalls();
     x += xSpeed;
