@@ -320,7 +320,7 @@ void howToPlayPage(){
   text(s,20,200);
   s = "2. The randomly generated maze will show. You are the pink circle.";
   text(s,20,220);
-  s = "3. Control the runner with the arrow keys.";
+  s = "3. Control the runner with the arrow keys. Press p to pause.";
   text(s,20,240);
   s = "  * Left will switch the runner's direction to the left";
   text(s,20,260);
