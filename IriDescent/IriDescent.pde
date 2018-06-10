@@ -46,7 +46,7 @@ class GenerateMaze{
       generatePath(0,(int)(Math.random()*cols));
       horizontalWalls();
       verticalWalls1();
-      verticalWalls1();
+      //verticalWalls1();
       verticalWalls2();
       clearPath();
   }
