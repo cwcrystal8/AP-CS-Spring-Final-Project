@@ -49,6 +49,7 @@ class GenerateMaze{
       //verticalWalls1();
       verticalWalls2();
       clearPath();
+      System.out.println(this);
   }
   //sets every cell to a single space
   void clear(){
@@ -124,11 +125,11 @@ class GenerateMaze{
   }
     }
     
-    public void verticalWalls1(){
+   void verticalWalls1(){
   for (int i = 0; i < rows; i++){
       if (i%2 == 0){
     int walls = 0;
-    int j = (int)(Math.random()*cols-1);
+    int j = (int)(Math.random()*(cols-2)+1);;
     if (maze[i][j] != '@'){
         maze[i][j] = '|';
     }
@@ -145,7 +146,7 @@ class GenerateMaze{
   void verticalWalls2(){
   for (int i = 0; i < rows; i++){
       if (i%2 == 0){
-    int j = (int)(Math.random()*cols -1 );
+    int j = (int)(Math.random()*(cols-2)+1);;
     if (maze[i][j] != '@'){
         maze[i][j] = '|';
     }
