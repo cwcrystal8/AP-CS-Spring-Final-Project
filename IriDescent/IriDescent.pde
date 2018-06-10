@@ -123,7 +123,7 @@ class GenerateMaze{
   for (int i = 0; i < rows; i++){
       if (i%2 == 0){
     int walls = 0;
-    int j = (int)(Math.random()*cols);
+    int j = (int)(Math.random()*cols-1);
     if (maze[i][j] != '@'){
         maze[i][j] = '|';
     }
@@ -140,7 +140,7 @@ class GenerateMaze{
   void verticalWalls2(){
   for (int i = 0; i < rows; i++){
       if (i%2 == 0){
-    int j = (int)(Math.random()*cols);
+    int j = (int)(Math.random()*cols -1 );
     if (maze[i][j] != '@'){
         maze[i][j] = '|';
     }
