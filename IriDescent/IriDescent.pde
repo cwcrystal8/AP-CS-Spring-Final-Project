@@ -109,11 +109,11 @@ class GenerateMaze{
         }
     }
 
-    for (int n = 0; n < (int)(Math.random()*.5); n++){
+    //for (int n = 0; n < (int)(Math.random()); n++){
         int hole = (int)(Math.random()*cols);
         if (maze[i][hole] != '@'){
       maze[i][hole] = ' ';
-        }
+        //}
     }
       }
   }
