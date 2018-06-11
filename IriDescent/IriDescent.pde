@@ -21,7 +21,7 @@ void setup(){
   walls = new Walls(maze2);
   maze = new Maze(maze2);
   runner = new Runner();
-  frameRate(120);
+  frameRate(160);
   size(840,600);
   drawBackground();
   gameOver = false;
@@ -411,7 +411,7 @@ void gameOverPage(){
   background(360 - colorRate % 360, 18, 100);
   textSize(60);
   fill(0);
-  text("Final Score",250,150);
+  text("You lost!",250,150);
   text("" + finalScore, 250, 250);
   colorMode(RGB,255,255,255);
   fill(255,182,193);
@@ -782,13 +782,33 @@ class SpeedSlower extends Token{
 }
 
 void mouseClicked(){
-  
+  //System.out.println(gameOver && !highScore);
   if(!highScore && !wonGame && !startGame && !howToPlay && mouseX > 320 && mouseX < 520 && mouseY > 250 && mouseY < 320){
+    finalScore = 0;
+    colorRate = 0;
     startGame = true;
     howToPlay = false;
     textSize(12);
-    colorRate = 0;
+    maze2 = new GenerateMaze(100,14);
+    maze = new Maze(maze2);
+    runner = new Runner();
+    frameRate(120);
+    gameOver = false;
+    num = -1;
+    updateRate = 0;
+    colorRate = 0; 
+    frameRates = 4;
+    yScale = width/maze.getMaze()[0].length;
+    tokenGrid = new Token[maze.getMaze().length][maze.getMaze()[0].length];
+    createTokens(maze.getMaze().length, maze.getMaze()[0].length);
+    howToPlay = false;
+    wonGame = false;
+    finalScore = 0;
+    walls = new Walls(maze2);
     startTime = millis();
+    pause = false;
+    highScore = false;
+    name = "";
   }
   else if(!highScore && !wonGame && !startGame && !howToPlay && mouseX > 320 && mouseX < 520 && mouseY > 350 && mouseY < 420){
     //High score board
@@ -808,10 +828,13 @@ void mouseClicked(){
     highScore = false;
     finalScore = 0;
     gameOver = false;
+    wonGame = false;
   }
   else if(!wonGame && !startGame && (howToPlay || highScore) && mouseX > 10 && mouseX < 110 && mouseY > 10 && mouseY < 60){
     howToPlay = false;
     highScore = false;
+    gameOver = false;
+    wonGame = false;
   }
   else if((highScore) && mouseX > 10 && mouseX < 110 && mouseY > 10 && mouseY < 60){
     howToPlay = false;
@@ -825,8 +848,7 @@ void mouseClicked(){
     highScore = true;
   }
   else if(!highScore && (wonGame || gameOver) && mouseX > 320 && mouseX < 520 && mouseY > 350 && mouseY < 420){
-   
-    startGame = true;
+  
     finalScore = 0;
     colorRate = 0;
     startGame = true;
@@ -853,9 +875,7 @@ void mouseClicked(){
     highScore = false;
     name = "";
   } 
-  else if(highScore && mouseX > 320 && mouseX < 520 && mouseY > 350 && mouseY < 420){
-    
-    startGame = true;
+  else if(highScore && mouseX > 320 && mouseX < 520 && mouseY > 450 && mouseY < 520){
     finalScore = 0;
     colorRate = 0;
     startGame = true;
@@ -896,10 +916,10 @@ void highScorePage(int score){
   if(/*!name.equals("") &&*/ score != 0 && wonGame && !trackingName){
     names.add(name);
     scores.add(1 / score + 1000);
-    System.out.println("Added");
+    //System.out.println("Added");
     finalScore = 0;
-    System.out.println(names);
-    System.out.println(scores);
+    //System.out.println(names);
+    //System.out.println(scores);
   }
   
   String[][] board = new String[11][2];
@@ -961,6 +981,6 @@ void highScorePage(int score){
 void highScorePage(){
   //System.out.println("fakeOne");
   wonGame = false;
-  gameOver = true;
+  //gameOver = false;
   highScorePage(0);
 }
