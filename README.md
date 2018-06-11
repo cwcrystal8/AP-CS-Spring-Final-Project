@@ -11,20 +11,30 @@ $ processing IriDescent.pde
 How to play:
 1. Press start to start a game.
 2. The randomly generate maze will show, and a pink circle is the runner.
-3. Control the runner with the arrow keys.
+3. Control the runner with the arrow keys. You can also press 'p' to pause.
   * Left will switch the runner's direction to the left
   * Right will switch the runner's direction to the right
   * Up will make the runner jump up if it isn't blocked by a wall
   * Down will make the runner stay still
 4. If you reach the top of the screen, the game is over.
 5. If you reach the bottom of the maze, you win!
-6. Try to win the maze as fast as possible! :) Once you win, press the "High Scores" button to log your high score. Type your name, and press "Enter." If you rank in the top ten, your score will appear on the board.
+6. Try to win the maze as fast as possible! The faster you are, the higher your score. Once you win, press the "High Scores" button to log your high score. Type your name, and press "Enter." If you rank in the top ten, your score will appear on the board.
 
 Good luck!
 
+## Features
+  * High Score Board
+  * Speed up/slow down power ups
+  * Key controls (see instructions)
+  * Mouse controls
+  * Random generation of the maze
+  * Ability to jump up and fall down
+  * Iridescence
+  * Start page, final score page, lost game page, how to play page, high score page, etc.
+
 ## Development Log
 ## 06/07
-Completed:
+Completed (since demo):
  * High score board
  * Maze generation
 ~~~~~~~
