@@ -806,6 +806,8 @@ void mouseClicked(){
     colorRate = 0;
     startTime = millis();
     highScore = false;
+    finalScore = 0;
+    gameOver = false;
   }
   else if(!wonGame && !startGame && (howToPlay || highScore) && mouseX > 10 && mouseX < 110 && mouseY > 10 && mouseY < 60){
     howToPlay = false;
@@ -820,7 +822,6 @@ void mouseClicked(){
   }
   else if(!highScore && (wonGame || gameOver) && mouseX > 320 && mouseX < 520 && mouseY > 450 && mouseY < 520){
     highScorePage(finalScore);
-    
     highScore = true;
   }
   else if(!highScore && (wonGame || gameOver) && mouseX > 320 && mouseX < 520 && mouseY > 350 && mouseY < 420){
