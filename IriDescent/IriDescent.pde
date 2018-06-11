@@ -811,6 +811,13 @@ void mouseClicked(){
     howToPlay = false;
     highScore = false;
   }
+  else if((highScore) && mouseX > 10 && mouseX < 110 && mouseY > 10 && mouseY < 60){
+    howToPlay = false;
+    highScore = false;
+    wonGame = false;
+    startGame = false;
+    finalScore = 0;
+  }
   else if(!highScore && (wonGame || gameOver) && mouseX > 320 && mouseX < 520 && mouseY > 450 && mouseY < 520){
     highScorePage(finalScore);
     
