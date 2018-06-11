@@ -16,7 +16,7 @@ ArrayList<Integer> scores = new ArrayList<Integer>();
 ArrayList<String> names = new ArrayList<String>();
 
 void setup(){
-  maze2 = new GenerateMaze(200,14);
+  maze2 = new GenerateMaze(100,14);
   //System.out.println(maze2);
   walls = new Walls(maze2);
   maze = new Maze(maze2);
@@ -68,7 +68,7 @@ class GenerateMaze{
       generatePath(0,(int)(Math.random()*cols));
       horizontalWalls();
       verticalWalls1();
-      //verticalWalls1();
+      verticalWalls2();
       verticalWalls2();
       clearPath();
       //System.out.println(this);
@@ -824,7 +824,7 @@ void mouseClicked(){
     startGame = true;
     howToPlay = false;
     textSize(12);
-    maze2 = new GenerateMaze(200,14);
+    maze2 = new GenerateMaze(100,14);
     maze = new Maze(maze2);
     runner = new Runner();
     frameRate(120);
@@ -853,7 +853,7 @@ void mouseClicked(){
     startGame = true;
     howToPlay = false;
     textSize(12);
-    maze2 = new GenerateMaze(200,14);
+    maze2 = new GenerateMaze(100,14);
     maze = new Maze(maze2);
     runner = new Runner();
     frameRate(120);
