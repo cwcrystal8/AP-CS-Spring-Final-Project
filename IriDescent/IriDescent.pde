@@ -16,7 +16,7 @@ ArrayList<Integer> scores = new ArrayList<Integer>();
 ArrayList<String> names = new ArrayList<String>();
 
 void setup(){
-  maze2 = new GenerateMaze(20,14);
+  maze2 = new GenerateMaze(200,14);
   //System.out.println(maze2);
   walls = new Walls(maze2);
   maze = new Maze(maze2);
