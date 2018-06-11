@@ -1,23 +1,28 @@
 import java.util.*;
+import java.io.*;
+import java.util.Arrays;
 
 int num, updateRate, frameRates, colorRate, yScale, startTime, finalScore;
 GenerateMaze maze2;
 Maze maze;
 Walls walls;
 Runner runner;
-boolean gameOver, startGame, howToPlay, wonGame;
+boolean gameOver, startGame, howToPlay, wonGame, highScore, trackingName;
 ArrayList<Token> tokens;
 Token[][] tokenGrid;
 boolean pause;
+String name;
+ArrayList<Integer> scores = new ArrayList<Integer>();
+ArrayList<String> names = new ArrayList<String>();
 
 void setup(){
-  maze2 = new GenerateMaze(200,7);
+  maze2 = new GenerateMaze(20,14);
   //System.out.println(maze2);
   walls = new Walls(maze2);
   maze = new Maze(maze2);
   runner = new Runner();
   frameRate(120);
-  size(420,600);
+  size(840,600);
   drawBackground();
   gameOver = false;
   num = -1;
@@ -33,6 +38,23 @@ void setup(){
   wonGame = false;
   finalScore = 0;
   pause = false;
+  highScore = false;
+  name = "";
+  
+  String[] tempNames;
+  String[] tempScores;
+  
+  
+  tempNames = loadStrings("names.txt");
+  tempScores = loadStrings("scores.txt");
+  
+  for(int i = 0; i < tempNames.length; i++){
+    scores.add(Integer.parseInt(tempScores[i]));
+    names.add(tempNames[i]);
+  }
+  
+  trackingName = false;
+  
 }
 
 class GenerateMaze{
@@ -49,7 +71,7 @@ class GenerateMaze{
       //verticalWalls1();
       verticalWalls2();
       clearPath();
-      System.out.println(this);
+      //System.out.println(this);
   }
   //sets every cell to a single space
   void clear(){
@@ -246,19 +268,25 @@ void createTokens(int row, int col){
 
 void draw(){
   if(!pause){
-  if(wonGame){
+  if(!highScore && wonGame){
     winGamePage();
   }
-  else if(!startGame && !howToPlay){
+  else if(highScore && wonGame){
+    highScorePage(finalScore);
+  }
+  else if(highScore){
+    highScorePage();
+  }
+  else if(!highScore && !startGame && !howToPlay){
     startPage();
   }
-  else if(!startGame && howToPlay){
+  else if(!highScore && !startGame && howToPlay){
     howToPlayPage();
   }
-  else if(gameOver){
+  else if(!highScore && gameOver){
     gameOverPage();
   }
-  else if(!gameOver && !howToPlay && !wonGame){
+  else if(!highScore && !gameOver && !howToPlay && !wonGame){
     if(runner.getY() - 30 <= -1 * num){
       drawBackground();
       runner.display();
@@ -301,17 +329,17 @@ void startPage(){
   colorMode(RGB,255,255,255);
   fill(0,182,193);
   stroke(255,182,193);
-  text("IriDescent",40,100);
+  text("IriDescent",250,100);
   fill(255,182,193);
-  rect(110,250,200,70,12,12,12,12);
-  rect(110,350,200,70,12,12,12,12);
-  rect(110,450,200,70,12,12,12,12);
+  rect(320,250,200,70,12,12,12,12);
+  rect(320,350,200,70,12,12,12,12);
+  rect(320,450,200,70,12,12,12,12);
   fill(255);
   textSize(36);
-  text("Start Game",115,298);
-  text("High Score",115,398);
+  text("Start Game",325,298);
+  text("High Score",325,398);
   textSize(33);
-  text("How to Play",115,498);
+  text("How to Play",325,498);
   colorRate++;
 }
 
@@ -320,37 +348,37 @@ void howToPlayPage(){
   background(360 - colorRate % 360, 18, 100);
   fill(0);
   textSize(60);
-  text("How to Play",40,150);
+  text("How to Play",250,150);
   String s = "1. Press start to start a game.";
   textSize(12);
-  text(s,20,200);
+  text(s,230,200);
   s = "2. The randomly generated maze will show. You are the pink circle.";
-  text(s,20,220);
-  s = "3. Control the runner with the arrow keys. Press p to pause.";
-  text(s,20,240);
-  s = "  * Left will switch the runner's direction to the left";
-  text(s,20,260);
-  s = "  * Right will switch the runner's direction to the right";
-  text(s,20,280);
-  s = "  * Up will make the runner jump up if it isn't blocked by a wall";
-  text(s,20,300);
-  s = "  * Down will make the runner stay still";
-  text(s,20,320);
+  text(s,230,220);
+  s = "3. Control the runner with the arrow keys, and press p to pause.";
+  text(s,230,240);
+  s = "    * Left will switch the runner's direction to the left";
+  text(s,230,260);
+  s = "    * Right will switch the runner's direction to the right";
+  text(s,230,280);
+  s = "    * Up will make the runner jump up if it isn't blocked by a wall";
+  text(s,230,300);
+  s = "    * Down will make the runner stay still";
+  text(s,230,320);
   s = "4. If you reach the top of the screen, the game is over.";
-  text(s,20,340);
+  text(s,230,340);
   s = "5. If you reach the bottom of the maze, you win!";
-  text(s,20,360);
+  text(s,230,360);
   s = "6. Try to win the maze as fast as possible! :)";
-  text(s,20,380);
+  text(s,230,380);
   s = "Good luck!";
-  text(s,20,400);
+  text(s,230,400);
   colorMode(RGB,255,255,255);
   fill(255,182,193);
-  rect(110,450,200,70,12,12,12,12);
+  rect(320,450,200,70,12,12,12,12);
   rect(10,10,100,50,12,12,12,12);
   fill(255);
   textSize(36);
-  text("Start Game",115,498);
+  text("Start Game",325,498);
   textSize(40);
   text("Back",15,49);
   colorRate++;
@@ -362,18 +390,18 @@ void winGamePage(){
   background(360 - colorRate % 360, 18, 100);
   textSize(60);
   fill(0);
-  text("Final Score",40,150);
-  text("" + finalScore, 40, 250);
+  text("Final Score",250,150);
+  text("" + finalScore, 250, 250);
   colorMode(RGB,255,255,255);
   fill(255,182,193);
   stroke(255,182,193);
-  rect(110,350,200,70,12,12,12,12);
-  rect(110,450,200,70,12,12,12,12);
+  rect(320,350,200,70,12,12,12,12);
+  rect(320,450,200,70,12,12,12,12);
   fill(255);
   textSize(36);
-  text("New Game",115,398);
+  text("New Game",325,398);
   textSize(33);
-  text("High Scores",115,498);
+  text("High Scores",325,498);
   colorRate++;
   
 }
@@ -383,18 +411,18 @@ void gameOverPage(){
   background(360 - colorRate % 360, 18, 100);
   textSize(60);
   fill(0);
-  text("Final Score",40,150);
-  text("" + finalScore, 40, 250);
+  text("Final Score",250,150);
+  text("" + finalScore, 250, 250);
   colorMode(RGB,255,255,255);
   fill(255,182,193);
   stroke(255,182,193);
-  rect(110,350,200,70,12,12,12,12);
-  rect(110,450,200,70,12,12,12,12);
+  rect(320,350,200,70,12,12,12,12);
+  rect(320,450,200,70,12,12,12,12);
   fill(255);
   textSize(36);
-  text("New Game",115,398);
+  text("New Game",325,398);
   textSize(33);
-  text("High Scores",115,498);
+  text("High Scores",325,498);
   colorRate++;
 }
 
@@ -586,14 +614,16 @@ class Runner{
     if(maze.getMaze()[row][col] == ' ' && leftBound % 60 == 0 && (y + 90 + num) < height){
       fallDown();
     }
-    
-    if(rightBound >= width){
+    else if(rightBound >= width){
       xSpeed = -1;
       x = width - 31;
     }
     else if(leftBound <= 0){
       xSpeed = 1;
       x = 31;
+    }
+    else if(maze.getMaze()[row][col] == ' ' && maze.getMaze()[row][col + 1] == ' '){
+      fallDown();
     }
     checkWalls();
     x += xSpeed;
@@ -627,6 +657,8 @@ class Runner{
     char[][] grid = maze.getMaze();
     if(grid.length == 1 + (y + 30) / 60){
       wonGame = true;
+      startGame = false;
+      trackingName = true;
       finalScore = millis() - startTime;
     }
   }
@@ -657,8 +689,16 @@ void keyPressed(){
   else if(keyCode == 40){
     runner.setXSpeed(0);
   }
-  else if(key == 'p'){
+  else if(!highScore && key == 'p'){
     pause = !pause;
+  }
+  else if(highScore && wonGame){
+    if(keyCode == 10){
+      trackingName = false;
+    }
+    else{
+      name += key;
+    }
   }
   //System.out.println(keyCode);
 }
@@ -743,35 +783,40 @@ class SpeedSlower extends Token{
 
 void mouseClicked(){
   
-  if(!wonGame && !startGame && !howToPlay && mouseX > 110 && mouseX < 310 && mouseY > 250 && mouseY < 320){
+  if(!highScore && !wonGame && !startGame && !howToPlay && mouseX > 320 && mouseX < 520 && mouseY > 250 && mouseY < 320){
     startGame = true;
     howToPlay = false;
     textSize(12);
     colorRate = 0;
     startTime = millis();
   }
-  else if(!wonGame && !startGame && !howToPlay && mouseX > 110 && mouseX < 310 && mouseY > 350 && mouseY < 420){
+  else if(!highScore && !wonGame && !startGame && !howToPlay && mouseX > 320 && mouseX < 520 && mouseY > 350 && mouseY < 420){
     //High score board
+    highScore = true;
   }
-  else if(!wonGame && !startGame && !howToPlay && mouseX > 110 && mouseX < 310 && mouseY > 450 && mouseY < 520){
+  else if(!highScore && !wonGame && !startGame && !howToPlay && mouseX > 320 && mouseX < 520 && mouseY > 450 && mouseY < 520){
     howToPlay = true;
     howToPlayPage();
     textSize(12);
   }
- else if(!wonGame && !startGame && howToPlay && mouseX > 110 && mouseX < 310 && mouseY > 450 && mouseY < 520){
+ else if(!wonGame && !startGame && (howToPlay || highScore) && mouseX > 320 && mouseX < 520 && mouseY > 450 && mouseY < 520){
     startGame = true;
     howToPlay = false;
     textSize(12);
     colorRate = 0;
     startTime = millis();
+    highScore = false;
   }
-  else if(!wonGame && !startGame && howToPlay && mouseX > 10 && mouseX < 110 && mouseY > 10 && mouseY < 60){
+  else if(!wonGame && !startGame && (howToPlay || highScore) && mouseX > 10 && mouseX < 110 && mouseY > 10 && mouseY < 60){
     howToPlay = false;
+    highScore = false;
   }
-  else if(wonGame && mouseX > 110 && mouseX < 310 && mouseY > 450 && mouseY < 520){
-    //high Score  
+  else if(!highScore && (wonGame || gameOver) && mouseX > 320 && mouseX < 520 && mouseY > 450 && mouseY < 520){
+    highScorePage(finalScore);
+    
+    highScore = true;
   }
-  else if((wonGame || gameOver) && mouseX > 110 && mouseX < 310 && mouseY > 350 && mouseY < 420){
+  else if(!highScore && (wonGame || gameOver) && mouseX > 320 && mouseX < 520 && mouseY > 350 && mouseY < 420){
    
     startGame = true;
     finalScore = 0;
@@ -779,8 +824,8 @@ void mouseClicked(){
     startGame = true;
     howToPlay = false;
     textSize(12);
-      maze2 = new GenerateMaze(30,7);
-  maze = new Maze(maze2);
+    maze2 = new GenerateMaze(200,14);
+    maze = new Maze(maze2);
     runner = new Runner();
     frameRate(120);
     gameOver = false;
@@ -796,6 +841,118 @@ void mouseClicked(){
     finalScore = 0;
     walls = new Walls(maze2);
     startTime = millis();
+    pause = false;
+    highScore = false;
+    name = "";
+  } 
+  else if(highScore && mouseX > 320 && mouseX < 520 && mouseY > 350 && mouseY < 420){
+    
+    startGame = true;
+    finalScore = 0;
+    colorRate = 0;
+    startGame = true;
+    howToPlay = false;
+    textSize(12);
+    maze2 = new GenerateMaze(200,14);
+    maze = new Maze(maze2);
+    runner = new Runner();
+    frameRate(120);
+    gameOver = false;
+    num = -1;
+    updateRate = 0;
+    colorRate = 0; 
+    frameRates = 4;
+    yScale = width/maze.getMaze()[0].length;
+    tokenGrid = new Token[maze.getMaze().length][maze.getMaze()[0].length];
+    createTokens(maze.getMaze().length, maze.getMaze()[0].length);
+    howToPlay = false;
+    wonGame = false;
+    finalScore = 0;
+    walls = new Walls(maze2);
+    startTime = millis();
+    pause = false;
+    highScore = false;
+    name = "";
+  }
+}
+
+void highScorePage(int score){
+  colorMode(HSB,360,100,100);
+  background(360 - colorRate % 360, 18, 100);
+  //ArrayList<String> names = new ArrayList<String>();
+  //ArrayList<Integer> scores = new ArrayList<Integer>();
+  
+  
+  ArrayList<Integer> numsUsed = new ArrayList<Integer>();
+  
+  if(/*!name.equals("") &&*/ score != 0 && wonGame && !trackingName){
+    names.add(name);
+    scores.add(1 / score + 1000);
+    System.out.println("Added");
+    finalScore = 0;
+    System.out.println(names);
+    System.out.println(scores);
   }
   
+  String[][] board = new String[11][2];
+  board[0][0] = "Names";
+  board[0][1] = "Scores";
+  
+  for(int i = 0; i < 10; i++){
+    int maxNum = -1, indexOfMaxNum = -1;
+    for(int j = 0; j < scores.size(); j++){
+      if(scores.get(j) > maxNum && numsUsed.indexOf(j) == -1){
+        maxNum = scores.get(j);
+        indexOfMaxNum = j;
+      }
+      
+    }
+    numsUsed.add(indexOfMaxNum);
+    board[i + 1][0] = names.get(indexOfMaxNum);
+    board[i + 1][1] = "" + scores.get(indexOfMaxNum);
+  }
+  
+  
+  
+  //System.out.println(Arrays.toString(board[1]));
+  //System.out.println(Arrays.toString(names));
+  //System.out.println(Arrays.toString(scores));
+  //System.out.println(names);
+  //System.out.println(scores);
+  
+  textSize(60);
+  text("High Scores",280,70);
+  textSize(20);
+  fill(0);
+  text(board[0][0], 500, 120);
+  text(board[0][1], 320, 120);
+  
+  int nameStart = 500, scoreStart = 320, level = 150;
+  for(int i = 1; i < 11; i++){
+    String score0 = board[i][1], name = board[i][0];
+    fill(0);
+    text(score0,scoreStart,level);
+    text(name,nameStart,level);
+    level+=30;
+  }
+  
+  
+  colorMode(RGB,255,255,255);
+  fill(255,182,193);
+  rect(320,450,200,70,12,12,12,12);
+  rect(10,10,100,50,12,12,12,12);
+  fill(255);
+  textSize(36);
+  text("New Game",325,498);
+  textSize(40);
+  text("Back",15,49);
+  colorRate++;
+
+}
+
+void highScorePage(){
+  //System.out.println("fakeOne");
+  wonGame = false;
+  gameOver = true;
+  highScorePage(0);
 }

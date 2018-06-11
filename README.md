@@ -25,6 +25,23 @@ Good luck!
 ## Development Log
 ## 06/07
 Completed:
+ * High score board
+ * Maze generation
+~~~~~~~
+~~~~~~~
+In Progress:
+ * Transportation portals
+~~~~~~~
+~~~~~~~
+Pending:
+ * Levels of difficulty
+~~~~~~~
+~~~~~~~
+Notes: We fixed several bugs in our code and also incorporated a high score page. We also adjusted the width to maze it harder.
+
+
+## 06/07
+Completed:
  * Tokens to speed up/slow down
  * Score in the top
  * Start page
