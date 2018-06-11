@@ -820,15 +820,31 @@ void mouseClicked(){
     textSize(12);
   }
  else if(!wonGame && !startGame && (howToPlay || highScore) && mouseX > 320 && mouseX < 520 && mouseY > 450 && mouseY < 520){
+    finalScore = 0;
+    colorRate = 0;
     startGame = true;
     howToPlay = false;
     textSize(12);
-    colorRate = 0;
-    startTime = millis();
-    highScore = false;
-    finalScore = 0;
+    maze2 = new GenerateMaze(100,14);
+    maze = new Maze(maze2);
+    runner = new Runner();
+    frameRate(120);
     gameOver = false;
+    num = -1;
+    updateRate = 0;
+    colorRate = 0; 
+    frameRates = 4;
+    yScale = width/maze.getMaze()[0].length;
+    tokenGrid = new Token[maze.getMaze().length][maze.getMaze()[0].length];
+    createTokens(maze.getMaze().length, maze.getMaze()[0].length);
+    howToPlay = false;
     wonGame = false;
+    finalScore = 0;
+    walls = new Walls(maze2);
+    startTime = millis();
+    pause = false;
+    highScore = false;
+    name = "";
   }
   else if(!wonGame && !startGame && (howToPlay || highScore) && mouseX > 10 && mouseX < 110 && mouseY > 10 && mouseY < 60){
     howToPlay = false;
